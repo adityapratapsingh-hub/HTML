@@ -1,0 +1,32 @@
+ h2{
+        color:brown;
+        background-color:wheat;
+    }
+    h1{
+        color:rgb(250,255,0);
+        background-color:wheat;
+    }
+    h1{
+        text-align: center;
+        border:solid;
+        width:50%;
+    }
+    p{
+        background-color: wheat;
+        color: white;
+    }
+    footer{
+        color:red;
+        background-color:wheat;
+    }
+    body{
+        background-color:midnightblue;
+    }
+    form{
+        color: aquamarine;
+    }
+    button{
+        color:black;
+        background-color: aqua;
+
+    }
