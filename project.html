@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini E-Commerce Store</title>
+<style>
+/* ====== CSS ====== */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+}
+
+header {
+    background: #007bff;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 { margin: 0; }
+
+.cart-btn {
+    cursor: pointer;
+    background: #28a745;
+    padding: 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.cart-btn:hover { background: #218838; }
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 20px;
+    justify-content: center;
+}
+
+.product {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover { background: #0056b3; }
+
+footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+/* Cart Modal */
+.cart-modal {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.cart-content {
+    background: white;
+    padding: 20px;
+    width: 300px;
+    border-radius: 10px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Online Store</h1>
+    <div class="cart-btn" onclick="toggleCart()">🛒 Cart (<span id="cart-count">0</span>)</div>
+</header>
+
+<main id="product-list">
+<!-- Products will load here -->
+</main>
+
+<!-- Cart Modal -->
+<div id="cart-modal" class="cart-modal">
+    <div class="cart-content">
+        <h2>Your Cart</h2>
+        <div id="cart-items"></div>
+        <p>Total: ₹<span id="cart-total">0</span></p>
+        <button onclick="checkout()">Checkout</button>
+        <button onclick="toggleCart()">Close</button>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Mini E-Commerce Project</p>
+</footer>
+
+<script>
+// ====== JavaScript ======
+
+// Product Data
+const products = [
+    { id: 1, name: "Laptop", price: 50000 },
+    { id: 2, name: "Mobile", price: 15000 },
+    { id: 3, name: "Headphones", price: 2000 },
+    { id: 4, name: "Smart Watch", price: 5000 },
+    { id: 5, name: "Keyboard", price: 1500 },
+    { id: 6, name: "Mouse", price: 800 }
+];
+
+let cart = [];
+
+const productList = document.getElementById("product-list");
+const cartCount = document.getElementById("cart-count");
+const cartModal = document.getElementById("cart-modal");
+const cartItemsDiv = document.getElementById("cart-items");
+const cartTotalSpan = document.getElementById("cart-total");
+
+// Load products
+function loadProducts() {
+    products.forEach(product => {
+        const div = document.createElement("div");
+        div.classList.add("product");
+        div.innerHTML = `
+            <h3>${product.name}</h3>
+            <p>Price: ₹${product.price}</p>
+            <button onclick="addToCart(${product.id})">Add to Cart</button>
+        `;
+        productList.appendChild(div);
+    });
+}
+
+// Add product to cart
+function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    cart.push(product);
+    updateCart();
+    alert(`${product.name} added to cart!`);
+}
+
+// Remove product from cart
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCart();
+}
+
+// Update cart display
+function updateCart() {
+    cartCount.innerText = cart.length;
+    cartItemsDiv.innerHTML = "";
+    let total = 0;
+    cart.forEach((item, index) => {
+        total += item.price;
+        const div = document.createElement("div");
+        div.classList.add("cart-item");
+        div.innerHTML = `
+            <span>${item.name} - ₹${item.price}</span>
+            <button onclick="removeFromCart(${index})">Remove</button>
+        `;
+        cartItemsDiv.appendChild(div);
+    });
+    cartTotalSpan.innerText = total;
+}
+
+// Toggle cart modal
+function toggleCart() {
+    cartModal.style.display = (cartModal.style.display === "flex") ? "none" : "flex";
+}
+
+// Checkout
+function checkout() {
+    if(cart.length === 0){
+        alert("Cart is empty!");
+        return;
+    }
+    alert(`Order placed! Total Amount: ₹${cart.reduce((sum,item)=>sum+item.price,0)}`);
+    cart = [];
+    updateCart();
+    toggleCart();
+}
+
+// Initialize
+loadProducts();
+
+</script>
+
+</body>
+</html>
